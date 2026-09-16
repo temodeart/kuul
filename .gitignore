@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+
+# Claude Design canvas: generated from index.html, keep only the generator
+canvas/*
+!canvas/build.mjs

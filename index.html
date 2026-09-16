@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kuul — Хэдэд? Хаана? Хэн байна?</title>
+<meta name="description" content="Kuul бол оюутны долоо хоногийн апп. Хуваарь, найзуудын чөлөөт цаг, ангийн групп, цуцлагдсан хичээл — бүгд нэг дэлгэц дээр. МУИС, ШУТИС-д 2027 оны хавар.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --ink:#121212; --ink-2:#4B4B49; --muted:#8C8C89;
+    --line:#E7E5E0; --line-2:#F0EEE9; --surface-2:#FAFAF8;
+    --grid:rgba(18,18,18,.03);
+    --now:#E0342C; --now-ink:#C41E17;
+    --blue-bg:#E7F0FE; --blue:#3B82F6; --blue-ink:#1D4ED8;
+    --green-bg:#E4F5EA; --green:#22A05B; --green-ink:#166534;
+    --red-bg:#FDEAEA; --red:#E0342C; --red-ink:#A8201A;
+    --purple-bg:#EFE8FF; --purple:#8B5CF6; --purple-ink:#5B21B6;
+    --yellow-bg:#FDF0D0; --yellow:#E0A315; --yellow-ink:#854D0E;
+    --display:"Onest",system-ui,-apple-system,sans-serif;
+    --sans:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+    --gutter:80px; --lead:30px; --ramp:52px; --barmid:.24; --pad:32px; --max:1240px; --hour:96px;
+  }
+  @media(max-width:900px){:root{--gutter:0px;--lead:12px;--ramp:16px;--barmid:.13;--pad:20px}}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:clip;position:relative}
+  a{color:inherit;text-decoration:none}
+  p{margin:0;text-wrap:pretty}
+  h1,h2{margin:0;font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:.98;text-wrap:balance}
+  h3{margin:0;font-family:var(--sans)}
+  .wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--pad)}
+  .g5{display:grid;grid-template-columns:var(--gutter) repeat(5,minmax(0,1fr))}
+  @media(max-width:900px){.g5{grid-template-columns:minmax(0,1fr)}}
+
+  /* ---- calendar paper ---- */
+  .paper{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:repeating-linear-gradient(180deg,var(--grid) 0 1px,transparent 1px var(--hour))}
+  .paper .cols{max-width:var(--max);margin:0 auto;height:100%;padding-inline:var(--pad)}
+  .paper .cols i{display:block;height:100%;margin-left:var(--gutter);border-left:1px solid var(--grid);
+    background-image:linear-gradient(90deg,var(--grid) 0 1px,transparent 1px);background-size:calc(100%/5) 100%}
+  @media(max-width:900px){.paper .cols i{background-size:calc(100%/2) 100%}}
+
+  /* ---- the now line ---- */
+  .nowline,.nowdot{position:fixed;left:0;right:0;top:46vh;pointer-events:none;opacity:0;
+    transition:opacity 420ms var(--ease-out)}
+  .nowline{z-index:0}
+  .nowdot{z-index:4}
+  .nowline[data-on],.nowdot[data-on]{opacity:1}
+  .nowline .in,.nowdot .in{max-width:var(--max);margin:0 auto;padding-inline:var(--pad);position:relative}
+  .nowline .bar{height:1.5px;margin-left:calc(var(--gutter) - var(--lead));border-radius:2px;
+    background:linear-gradient(90deg,var(--now) 0,var(--now) var(--lead),rgba(224,52,44,var(--barmid)) calc(var(--lead) + var(--ramp)),rgba(224,52,44,calc(var(--barmid) * .6)) 62%,rgba(224,52,44,0) 100%)}
+  .nowdot span{position:absolute;top:-4px;left:calc(var(--pad) + var(--gutter) - var(--lead) - 5px);width:10px;height:10px;border-radius:50%;background:var(--now)}
+
+  body>*:not(.paper):not(.nowline):not(.nowdot){position:relative;z-index:1}
+
+  /* ---- buttons ---- */
+  .btn{display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 26px;border-radius:999px;
+    font-family:var(--sans);font-weight:600;font-size:16px;border:0;cursor:pointer;background:var(--ink);color:#fff;
+    transition:transform 160ms var(--ease-out),background 160ms ease;touch-action:manipulation}
+  .btn:active{transform:scale(.97)}
+  @media(hover:hover) and (pointer:fine){.btn:hover{background:#000}}
+  .btn:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:999px}
+
+  /* ---- nav ---- */
+  .nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.88);backdrop-filter:blur(14px) saturate(1.3);
+    border-bottom:1px solid transparent;transition:border-color 200ms ease}
+  .nav[data-stuck]{border-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{font-family:var(--display);font-weight:900;font-size:24px;letter-spacing:-.05em;display:inline-flex;align-items:baseline}
+  .brand i{width:8px;height:8px;border-radius:50%;background:var(--now);margin-left:4px}
+  .nav .btn{min-height:42px;padding:0 18px;font-size:15px}
+
+  /* ---- hero ---- */
+  .hero{padding-block:72px 96px}
+  .hero .copy{grid-column:2/span 3;align-self:center}
+  .hero .stage{grid-column:5/span 2;align-self:center}
+  @media(max-width:900px){.hero{padding-block:36px 64px}.hero .copy,.hero .stage{grid-column:auto}.hero .stage{margin-top:52px}}
+  h1{font-size:clamp(46px,7vw,92px);font-weight:900;letter-spacing:-.05em}
+  h1 .q{display:block}
+  h1 .q:nth-child(1){color:var(--blue-ink)}
+  h1 .q:nth-child(2){color:var(--purple-ink)}
+  .lead{font-size:clamp(18px,1.55vw,21px);color:var(--ink-2);max-width:44ch;margin-top:28px}
+  .lead b{color:var(--ink);font-weight:700}
+  .cta{margin-top:36px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  h1 .q,.lead,.cta,.stage{animation:rise 720ms var(--ease-out) both}
+  h1 .q:nth-child(2){animation-delay:80ms}
+  h1 .q:nth-child(3){animation-delay:160ms}
+  .stage{animation-delay:200ms}
+  .lead{animation-delay:260ms}
+  .cta{animation-delay:340ms}
+
+  /* ---- phone ---- */
+  .stage{display:flex;justify-content:center;position:relative;padding-top:84px}
+  .phone{position:relative;z-index:1;flex:none;width:390px;background:#fff;border-radius:44px;padding:13px;
+    box-shadow:0 2px 6px rgba(18,18,18,.06),0 40px 90px -36px rgba(18,18,18,.42),0 0 0 1px var(--line)}
+  .screen{background:#fff;border-radius:33px;overflow:hidden;padding:18px 12px 0;height:610px;display:flex;flex-direction:column}
+  .status{display:flex;justify-content:space-between;font-weight:700;font-size:14px;padding:2px 6px 12px}
+  .batt{width:24px;height:12px;border:2px solid var(--ink);border-radius:4px;position:relative;display:inline-block;vertical-align:middle}
+  .batt::after{content:"";position:absolute;inset:2px;right:6px;background:var(--ink);border-radius:1px}
+  .shead{display:flex;justify-content:space-between;align-items:flex-end;padding:0 4px 14px}
+  .shead small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .shead .month{font-family:var(--display);font-size:23px;font-weight:800;letter-spacing:-.04em;line-height:1.15;margin-top:2px}
+  .chip{background:var(--surface-2);border:1px solid var(--line-2);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+  .days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 4px;padding:0 4px;margin-bottom:14px}
+  .day{text-align:center;padding:7px 0;border-radius:14px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.02em}
+  .day b{display:block;font-family:var(--sans);font-size:17px;font-weight:700;color:var(--ink);margin-top:3px;letter-spacing:-.02em}
+  .day.today{background:var(--ink);color:#B9B9B7}
+  .day.today b{color:#fff}
+
+  .agenda{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 8px;padding:0 4px;flex:1;--h:42px}
+  .hours{position:relative}
+  .hours span{position:absolute;right:0;font-family:var(--mono);font-size:10px;color:var(--muted);transform:translateY(-5px)}
+  .lane{position:relative;border-left:1px solid var(--line-2)}
+  .row{position:absolute;left:8px;right:0;border-radius:12px;border-left:4px solid;padding:9px 12px;overflow:hidden}
+  .row b{display:block;font-size:13px;font-weight:600;letter-spacing:-.015em;line-height:1.25;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;width:fit-content;max-width:100%}
+  .row span{display:block;font-family:var(--mono);font-size:10.5px;margin-top:5px;opacity:.85;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row.blue{background:var(--blue-bg);border-color:var(--blue);color:var(--blue-ink)}
+  .row.green{background:var(--green-bg);border-color:var(--green);color:var(--green-ink)}
+  .row.red{background:var(--red-bg);border-color:var(--red);color:var(--red-ink)}
+  .row.purple{background:var(--purple-bg);border-color:var(--purple);color:var(--purple-ink)}
+  .row.off{opacity:.55;transition:opacity 320ms ease 700ms}
+  .row.off b{max-width:calc(100% - 100px)}
+  .row.off b::after{content:"";position:absolute;left:0;right:0;top:54%;height:1.5px;background:currentColor;
+    transform-origin:left;transition:transform 300ms var(--ease-out) 700ms}
+  .row .tag{position:absolute;right:10px;top:9px;font-family:var(--sans);font-size:10px;font-weight:600;
+    background:var(--red);color:#fff;border-radius:999px;padding:3px 8px;transition:opacity 260ms var(--ease-out) 780ms}
+  .now{position:absolute;left:0;right:0;height:2px;background:var(--now);z-index:2}
+  .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--now)}
+  .tabbar{display:flex;justify-content:space-around;padding:12px 0 14px;border-top:1px solid var(--line-2);margin:0 -12px;font-size:10px;font-weight:600;color:var(--muted)}
+  .tabbar span{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .tabbar i{width:22px;height:22px;border:2px solid #A8A8A5;border-radius:50%}
+  .tabbar i.sq{border-radius:7px}
+  .tabbar span.on{color:var(--ink)}
+  .tabbar span.on i{background:var(--ink);border-color:var(--ink)}
+
+  .push{position:absolute;z-index:3;top:0;left:50%;width:min(342px,92%);
+    transform:translateX(-50%) rotate(1.2deg);background:rgba(255,255,255,.97);border:1px solid var(--line);
+    border-radius:22px;padding:13px 16px;box-shadow:0 20px 44px -20px rgba(18,18,18,.34);
+    display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;
+    transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+  .push .app{width:38px;height:38px;border-radius:11px;background:var(--ink);color:#fff;display:grid;place-items:center;
+    font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:-.05em}
+  .push .app i{width:5px;height:5px;border-radius:50%;background:var(--now);margin-left:1px}
+  .push b{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em}
+  .push span{display:block;font-size:13px;color:var(--ink-2);margin-top:1px}
+  .push time{font-family:var(--mono);font-size:11px;color:var(--muted);align-self:start}
+  .js .stage:not([data-played]) .push{opacity:0;transform:translateX(-50%) translateY(-34px) rotate(1.2deg)}
+  .js .stage:not([data-played]) .row.off{opacity:1}
+  .js .stage:not([data-played]) .row.off b{max-width:calc(100% - 100px)}
+  .row.off b::after{transform:scaleX(0)}
+  .js .stage:not([data-played]) .row .tag{opacity:0}
+  @media(max-width:700px){
+    .push{width:min(310px,96%);grid-template-columns:34px 1fr;padding:11px 14px}
+    .push time{display:none}.push .app{width:34px;height:34px}.push b{font-size:13px}.push span{font-size:12px}
+  }
+  @media(max-width:900px){
+    .stage{min-width:0;overflow-x:clip;height:calc(var(--ph,642px)*var(--ps,1) + 84px);align-items:flex-start}
+    .phone{transform:scale(var(--ps,1));transform-origin:top center}
+  }
+
+  /* ---- universities ---- */
+  .unis{position:relative;padding-block:44px 34px}
+  .unis-toggle{position:absolute;z-index:3;top:4px;left:var(--pad);width:34px;height:34px;
+    display:grid;place-items:center;border:1px solid var(--line);background:#fff;border-radius:50%;
+    color:var(--ink-2);cursor:pointer;padding:0;opacity:0;pointer-events:none;
+    transition:transform 160ms var(--ease-out),border-color 160ms ease,opacity 120ms ease}
+  .unis-toggle:focus,.unis-toggle:focus-visible{opacity:1;pointer-events:auto}
+  .unis-toggle{position:relative}
+  .unis-toggle::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+  .unis-toggle:active{transform:scale(.94)}
+  @media(hover:hover) and (pointer:fine){.unis-toggle:hover{border-color:#C9C7C1}}
+  .unis-toggle .i-play{display:none}
+  .unis-toggle[aria-pressed="true"] .i-pause{display:none}
+  .unis-toggle[aria-pressed="true"] .i-play{display:block}
+  html:not(.js) .unis-toggle{display:none}
+  .unis-track{grid-column:2/span 5;grid-row:1;display:flex;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 3%,#000 97%,transparent 100%)}
+  .unis-list{flex:none;display:flex;align-items:baseline;gap:46px;margin:0;padding:0 46px 0 0;list-style:none;
+    animation:unislide 42s linear infinite}
+  .unis-track[data-paused] .unis-list{animation-play-state:paused}
+  @media(hover:hover) and (pointer:fine){.unis-track:hover .unis-list{animation-play-state:paused}}
+  @keyframes unislide{to{transform:translateX(-100%)}}
+  .unis-list li{display:flex;align-items:baseline;gap:9px;white-space:nowrap}
+  .unis-list .mark{font-family:var(--display);font-size:21px;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
+  .unis-list .st{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .unis-list .st.on{color:var(--green-ink)}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  @media(max-width:900px){
+    .unis{padding-block:32px 26px}
+    .unis-track{grid-column:auto;grid-row:auto}
+    .unis-list{gap:34px;padding-right:34px}
+    .unis-list .mark{font-size:19px}
+  }
+
+  /* ---- the day ---- */
+  .moment{padding-block:96px;align-items:start}
+  .moment .when{grid-column:1;grid-row:1;align-self:start;font-family:var(--mono);font-size:13px;color:var(--muted);padding-top:11px;
+    text-align:right;padding-right:16px;white-space:nowrap;transition:color 220ms ease}
+  .moment.on .when{color:var(--now-ink)}
+  .moment .txt{grid-column:2/span 2;grid-row:1}
+  .moment .obj{grid-column:5/span 2;grid-row:1}
+  .moment.flip .txt{grid-column:5/span 2;grid-row:1}
+  .moment.flip .obj{grid-column:2/span 2;grid-row:1}
+  .moment h2{font-size:clamp(31px,3.9vw,50px)}
+  .moment .txt p{margin-top:24px;color:var(--ink-2);font-size:clamp(17px,1.35vw,19px);max-width:42ch}
+  @media(max-width:900px){
+    .moment{padding-block:72px}
+    .obj>*{max-width:440px}
+    .moment .when,.moment .txt,.moment .obj,.moment.flip .txt,.moment.flip .obj{grid-column:auto;grid-row:auto;text-align:left;padding:0}
+    .moment .when{margin-bottom:14px}
+    .moment .obj{margin-top:34px}
+    .moment .txt p{max-width:none}
+  }
+
+  .js .reveal .when,.js .reveal h2,.js .reveal .txt p,.js .reveal .obj{opacity:0;transform:translateY(14px);
+    transition:opacity 620ms var(--ease-out),transform 620ms var(--ease-out)}
+  .js .reveal[data-in] .when,.js .reveal[data-in] h2,.js .reveal[data-in] .txt p,.js .reveal[data-in] .obj{opacity:1;transform:none}
+  .js .reveal[data-in] h2{transition-delay:60ms}
+  .js .reveal[data-in] .txt p,.js .reveal[data-in] .obj{transition-delay:130ms}
+
+  /* ---- product objects ---- */
+  .card{background:#fff;border:1px solid var(--line);border-radius:20px;
+    box-shadow:0 1px 2px rgba(18,18,18,.04),0 26px 50px -30px rgba(18,18,18,.3)}
+  .obj{display:flex}
+  .obj>*{width:100%}
+
+  .alert{padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:10px 14px}
+  .alert .type{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2)}
+  .alert .type i{width:10px;height:10px;border-radius:3px;background:var(--red)}
+  .alert h3{grid-column:1/-1;font-size:18px;font-weight:600;letter-spacing:-.015em}
+  .alert .who{grid-column:1/-1;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);min-height:24px}
+  .states{position:relative;display:inline-grid;justify-self:end;justify-items:end}
+  .states>*{grid-area:1/1;transition:opacity 240ms var(--ease-out)}
+  .pill{font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;white-space:nowrap}
+  .pill.grey{background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+  .pill.green{background:var(--green-bg);color:var(--green-ink)}
+  .js .states .on{opacity:0}
+  .js [data-confirmed] .states .on{opacity:1}
+  .js [data-confirmed] .states .off{opacity:0}
+  html:not(.js) .states .off{display:none}
+  .avs{display:inline-flex;flex:none}
+  .av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;border:2px solid #fff}
+  .avs .av+.av{margin-left:-9px}
+  .js .avs .av{opacity:0;transform:scale(.9);transition:opacity 280ms var(--ease-out),transform 280ms var(--ease-out)}
+  .js [data-confirmed] .avs .av{opacity:1;transform:none}
+  .js [data-confirmed] .avs .av:nth-child(2){transition-delay:70ms}
+  .js [data-confirmed] .avs .av:nth-child(3){transition-delay:140ms}
+  .votes{grid-column:1/-1;display:flex;gap:10px;margin-top:6px}
+  .votes span{flex:1;text-align:center;padding:11px;border-radius:13px;font-size:14px;font-weight:600;border:1px solid var(--line)}
+  .votes span:first-child{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .free{padding:8px}
+  .free header{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px 12px;font-weight:600;font-size:16px}
+  .free header span{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+  .frow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;font-size:15px}
+  .frow:nth-of-type(odd){background:var(--surface-2)}
+  .frow .av{width:34px;height:34px;font-size:13px;border:0;flex:none}
+  .frow .nm{font-weight:500}
+  .frow .st{margin-left:auto;font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px;background:var(--green-bg);color:var(--green-ink);white-space:nowrap}
+  .frow .st.busy{background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-weight:500;
+    max-width:11rem;overflow:hidden;text-overflow:ellipsis}
+  .free footer{padding:12px 6px 6px}
+  .free footer span{display:block;text-align:center;background:var(--ink);color:#fff;border-radius:999px;padding:13px;font-weight:600;font-size:15px}
+
+  .chat{overflow:hidden}
+  .chat header{padding:15px 17px;border-bottom:1px solid var(--line-2);display:flex;gap:12px;align-items:center}
+  .chat header .sq{width:40px;height:40px;flex:none;border-radius:12px;background:var(--purple-bg);border-left:4px solid var(--purple);
+    color:var(--purple-ink);display:grid;place-items:center;font-family:var(--mono);font-size:10px}
+  .chat header b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .chat header span{font-size:13px;color:var(--muted)}
+  .chat .pin{background:var(--surface-2);padding:10px 17px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--line-2)}
+  .chat .pin b{font-weight:600;color:var(--ink)}
+  .msgs{padding:15px 17px 18px;display:flex;flex-direction:column;gap:11px}
+  .msg{display:flex;gap:10px;align-items:flex-end;max-width:90%}
+  .msg .av{width:28px;height:28px;font-size:11px;border:0;flex:none}
+  .msg p{background:var(--surface-2);border:1px solid var(--line-2);padding:9px 13px;border-radius:16px 16px 16px 5px;font-size:14px;line-height:1.45}
+  .msg small{display:block;font-size:11px;color:var(--muted);margin:0 0 4px 3px}
+  .msg.me{align-self:flex-end;flex-direction:row-reverse}
+  .msg.me p{background:var(--ink);border-color:var(--ink);color:#fff;border-radius:16px 16px 5px 16px}
+
+  .lf{overflow:hidden}
+  .lf .img{height:168px;position:relative;
+    background:radial-gradient(130px 70px at 28% 42%,#C9D4E8 0,transparent 70%),
+               radial-gradient(170px 90px at 72% 62%,#E6D5C0 0,transparent 70%),
+               linear-gradient(135deg,#E2E6EC,#F1F2F5)}
+  .lf .img::after{content:"";position:absolute;inset:0;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  .lf .blurtag{position:absolute;z-index:1;left:16px;top:14px;font-size:11px;font-weight:600;color:var(--ink-2);
+    background:rgba(255,255,255,.88);border-radius:999px;padding:5px 10px}
+  .lf .corner{position:absolute;right:18px;bottom:16px;z-index:1;width:92px;padding:9px;border-radius:9px;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+  .lf .corner i{display:block;height:5px;border-radius:3px;background:#DEDCD6}
+  .lf .corner i:first-child{width:62%;background:var(--blue)}
+  .lf .corner i:last-child{width:40%}
+  .lf .body{padding:15px 17px 17px}
+  .lf .cat{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-2)}
+  .lf .cat i{width:10px;height:10px;border-radius:3px;background:var(--yellow)}
+  .lf h3{font-size:18px;font-weight:600;letter-spacing:-.015em;margin-top:7px}
+  .lf .meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;font-size:13px;color:var(--muted)}
+
+  /* ---- closing ---- */
+  .close{padding-block:120px 96px;scroll-margin-top:80px}
+  .close .box{grid-column:2/span 5}
+  .close h2{font-size:clamp(44px,8.4vw,116px);font-weight:900;letter-spacing:-.055em}
+  .close h2 em{font-style:normal;color:var(--now)}
+  .close .sub{font-size:clamp(17px,1.5vw,20px);color:var(--ink-2);max-width:50ch;margin-top:28px}
+  @media(max-width:900px){.close{padding-block:80px 72px}.close .box{grid-column:auto}}
+  form{margin-top:40px;display:flex;gap:12px;flex-wrap:wrap;max-width:580px}
+  label{display:block;width:100%;font-size:14px;font-weight:600;margin-bottom:10px}
+  .field{flex:1;min-width:250px}
+  input[type=email]{width:100%;height:52px;padding:0 20px;border-radius:999px;border:1.5px solid #D9D7D1;background:#fff;
+    color:var(--ink);font:inherit;font-size:16px;transition:border-color 160ms ease}
+  input[type=email]::placeholder{color:var(--muted)}
+  input[type=email]:focus{border-color:var(--ink)}
+  input[aria-invalid="true"]{border-color:var(--now)}
+  .err{display:none;font-size:14px;color:var(--now-ink);margin-top:10px;padding-left:20px}
+  .err.show{display:block}
+  .note{font-size:14px;color:var(--muted);margin-top:16px}
+  .thanks{display:none;margin-top:40px;font-size:clamp(18px,1.6vw,22px);font-weight:600}
+  .thanks span{color:var(--green-ink)}
+  form.done{display:none}
+  form.done ~ .thanks{display:block}
+  form.done ~ .note{display:none}
+
+  footer{padding-block:0 44px;font-size:14px;color:var(--muted)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:26px}
+  footer nav{display:flex;gap:20px}
+  @media(hover:hover){footer a:hover{color:var(--ink)}}
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    h1 .q,.lead,.cta,.stage{animation:none}
+    .push,.row.off,.row.off b::after,.row .tag,.avs .av,.states>*{transition-duration:1ms!important;transition-delay:0ms!important}
+    .js .stage:not([data-played]) .push{transform:translateX(-50%) rotate(1.2deg)}
+    .js .reveal .when,.js .reveal h2,.js .reveal .txt p,.js .reveal .obj{transform:none;transition:opacity 200ms ease}
+    .btn,.unis-toggle{transition:none}
+    .unis-list{animation:none;flex-wrap:wrap;gap:16px 34px;padding-right:0}
+    .unis-list[aria-hidden]{display:none}
+    .unis-track{overflow:visible;-webkit-mask-image:none;mask-image:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="paper" aria-hidden="true"><div class="cols"><i></i></div></div>
+<div class="nowline" id="nowline" aria-hidden="true"><div class="in"><div class="bar"></div></div></div>
+<div class="nowdot" id="nowdot" aria-hidden="true"><div class="in"><span></span></div></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Kuul">Kuul<i aria-hidden="true"></i></a>
+    <a class="btn" href="#join">Нээгдэхэд мэдэгд</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap g5">
+    <div class="copy">
+      <h1><span class="q">Хэдэд?</span><span class="q">Хаана?</span><span class="q">Хэн байна?</span></h1>
+      <p class="lead"><b>Kuul</b> бол оюутны долоо хоногийн апп. Хуваарь чинь, найзуудын чинь чөлөөт цаг, ангийн групп, цуцлагдсан хичээл — бүгд нэг дэлгэц дээр.</p>
+      <div class="cta">
+        <a class="btn" href="#join">Нээгдэхэд мэдэгд</a>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="push">
+        <span class="app">K<i></i></span>
+        <div><b>Магадлалын онол цуцлагдлаа</b><span>3 ангийнхан баталгаажуулав</span></div>
+        <time>одоо</time>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="status"><span>9:41</span><span>••• <i class="batt"></i></span></div>
+          <div class="shead">
+            <div><small>Лхагва гараг</small><p class="month">9 сарын 16 ▾</p></div>
+            <span class="chip">Өдөр ▾</span>
+          </div>
+          <div class="days">
+            <span class="day">ДАВ<b>14</b></span>
+            <span class="day">МЯГ<b>15</b></span>
+            <span class="day today">ЛХА<b>16</b></span>
+            <span class="day">ПҮР<b>17</b></span>
+            <span class="day">БАА<b>18</b></span>
+          </div>
+          <div class="agenda">
+            <div class="hours">
+              <span style="top:0">09</span><span style="top:calc(var(--h)*2)">11</span><span style="top:calc(var(--h)*4)">13</span><span style="top:calc(var(--h)*6)">15</span><span style="top:calc(var(--h)*8)">17</span>
+            </div>
+            <div class="lane">
+              <div class="row blue" style="top:0;height:calc(var(--h)*1.4)"><b>Өгөгдлийн сан</b><span>09:00–10:20 · B2.04 · лекц</span></div>
+              <div class="row red off" style="top:calc(var(--h)*2);height:calc(var(--h)*1.4)"><b>Магадлалын онол</b><span>11:00–12:20 · C3.01 · лекц</span><i class="tag">Цуцлагдсан</i></div>
+              <div class="now" style="top:calc(var(--h)*3.87)"></div>
+              <div class="row purple" style="top:calc(var(--h)*5);height:calc(var(--h)*1.4)"><b>Дискрет математик</b><span>14:00–15:20 · A2.20 · семинар</span></div>
+              <div class="row green" style="top:calc(var(--h)*7);height:calc(var(--h)*1.4)"><b>Мэдээлэл технологийн үндэс</b><span>16:00–17:20 · H-2 · лекц</span></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <span class="on"><i class="sq"></i>Хуваарь</span>
+            <span><i></i>Найзууд</span>
+            <span><i class="sq"></i>Групп</span>
+            <span><i></i>Би</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="unis wrap g5" aria-label="Дэмжигдэж буй сургуулиуд">
+    <button class="unis-toggle" type="button" aria-pressed="false">
+      <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" focusable="false" fill="currentColor">
+        <rect class="i-pause" x="3.5" y="2.5" width="3" height="11" rx="1.2"/><rect class="i-pause" x="9.5" y="2.5" width="3" height="11" rx="1.2"/>
+        <path class="i-play" d="M4.5 2.6 13 8 4.5 13.4Z"/>
+      </svg>
+      <span class="sr">Сургуулиудын хөдөлгөөнийг зогсоох</span>
+    </button>
+    <div class="unis-track" id="unisTrack"><ul class="unis-list"><li><span class="mark">МУИС</span><span class="st on">бэлэн</span></li><li><span class="mark">ШУТИС</span><span class="st on">бэлэн</span></li><li><span class="mark">МУБИС</span><span class="st">удахгүй</span></li><li><span class="mark">АШУҮИС</span><span class="st">удахгүй</span></li><li><span class="mark">ХААИС</span><span class="st">удахгүй</span></li><li><span class="mark">СЭЗИС</span><span class="st">удахгүй</span></li></ul><ul class="unis-list" aria-hidden="true"><li><span class="mark">МУИС</span><span class="st on">бэлэн</span></li><li><span class="mark">ШУТИС</span><span class="st on">бэлэн</span></li><li><span class="mark">МУБИС</span><span class="st">удахгүй</span></li><li><span class="mark">АШУҮИС</span><span class="st">удахгүй</span></li><li><span class="mark">ХААИС</span><span class="st">удахгүй</span></li><li><span class="mark">СЭЗИС</span><span class="st">удахгүй</span></li></ul><ul class="unis-list" aria-hidden="true"><li><span class="mark">МУИС</span><span class="st on">бэлэн</span></li><li><span class="mark">ШУТИС</span><span class="st on">бэлэн</span></li><li><span class="mark">МУБИС</span><span class="st">удахгүй</span></li><li><span class="mark">АШУҮИС</span><span class="st">удахгүй</span></li><li><span class="mark">ХААИС</span><span class="st">удахгүй</span></li><li><span class="mark">СЭЗИС</span><span class="st">удахгүй</span></li></ul></div>
+  </section>
+
+  <div id="day">
+
+    <article class="moment wrap g5 reveal" id="m1">
+      <time class="when" datetime="07:52">07:52</time>
+      <div class="txt">
+        <h2>Гарахаасаа өмнө мэд.</h2>
+        <p>Хичээл цуцлагдвал, танхим солигдвол Kuul чамд түрүүлж хэлнэ. Ангийнхан чинь «үнэн» гэж баталгаажуулсан мэдээ л push болж ирнэ. Цуурхал ирэхгүй.</p>
+      </div>
+      <div class="obj">
+        <div class="card alert" id="alert1">
+          <span class="type"><i></i>Хичээл цуцлагдсан</span>
+          <span class="states">
+            <span class="pill grey off">Баталгаажаагүй · 1/3</span>
+            <span class="pill green on">Баталгаажсан · 3/3</span>
+          </span>
+          <h3>Магадлалын онол · Лха 11:00 · C3.01</h3>
+          <span class="who">
+            <span class="avs"><i class="av" style="background:var(--blue)">Б</i><i class="av" style="background:var(--purple)">Т</i><i class="av" style="background:var(--yellow)">А</i></span>
+            Б., Т. ба 1 хүн баталгаажуулав · 4 мин
+          </span>
+          <div class="votes"><span>Үнэн</span><span>Худал</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="moment wrap g5 reveal flip">
+      <time class="when" datetime="12:20">12:20</time>
+      <div class="txt">
+        <h2>«Хэн чөлөөтэй вэ?» гэж бичихгүй.</h2>
+        <p>Найзуудын чинь хуваарь Kuul дээр байна. Одоо хэн чөлөөтэй, хэдэн цаг хүртэл гэдгийг нэг товчоор хар. Уулзах хүнээ сонгоод л «Уулзах уу?» гэж илгээ.</p>
+      </div>
+      <div class="obj">
+        <div class="card free">
+          <header>Одоо чөлөөтэй <span>ЛХА 12:20</span></header>
+          <div class="frow"><i class="av" style="background:var(--blue)">Б</i><span class="nm">Билгүүн</span><span class="st">14:00 хүртэл</span></div>
+          <div class="frow"><i class="av" style="background:var(--purple)">Т</i><span class="nm">Тэмүүлэн</span><span class="st">15:30 хүртэл</span></div>
+          <div class="frow"><i class="av" style="background:var(--green)">Н</i><span class="nm">Номин</span><span class="st">13:00 хүртэл</span></div>
+          <div class="frow"><i class="av" style="background:var(--yellow)">А</i><span class="nm">Анар</span><span class="st busy">Мэдээлэл технологийн үндэс</span></div>
+          <footer><span>Уулзах уу? · Номын сан</span></footer>
+        </div>
+      </div>
+    </article>
+
+    <article class="moment wrap g5 reveal">
+      <time class="when" datetime="14:05">14:05</time>
+      <div class="txt">
+        <h2>Ангийн групп өөрөө үүсдэг.</h2>
+        <p>Дискрет математикийг хуваарьтаа нэмэнгүүт чи тэр бүлгийн группт орчихсон байна. Тэнд яг чамтай хамт суудаг хүмүүс л байгаа. Хэн ч «групп үүсгэе» гэж бичих хэрэггүй.</p>
+      </div>
+      <div class="obj">
+        <div class="card chat">
+          <header><span class="sq">A2.20</span><div><b>Дискрет математик · Лха 14:00</b><span>38 / 60 оюутан аппад</span></div></header>
+          <div class="pin"><b>Тогтоосон</b> · Даалгавар: 42–47-р хуудас, Пү хүртэл</div>
+          <div class="msgs">
+            <div class="msg"><i class="av" style="background:var(--green)">Н</i><div><small>Номин</small><p>Өнөөдрийн даалгавар хэд дэх хуудас байсан бэ?</p></div></div>
+            <div class="msg me"><i class="av" style="background:var(--ink)">Б</i><div><p>42–47. Багш 46-г заавал гэсэн</p></div></div>
+            <div class="msg"><i class="av" style="background:var(--yellow)">А</i><div><small>Анар</small><p>Хэн 15:00-д номын санд байх вэ? Хамт хийе</p></div></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="moment wrap g5 reveal flip">
+      <time class="when" datetime="17:30">17:30</time>
+      <div class="txt">
+        <h2>Үнэмлэхээ гээсэн үү? Олдлоо.</h2>
+        <p>Гээсэн, олсон зүйлээ Kuul дээр тавь. Үнэмлэх олдвол зөвхөн эзэнд нь хувийн мэдэгдэл очно. Нэр, зураг нь хэнд ч харагдахгүй. Дараа нь чатаар уулзаад л авчихна.</p>
+      </div>
+      <div class="obj">
+        <div class="card lf">
+          <div class="img"><span class="blurtag">Зургийг автоматаар бүдгэрүүлэв</span><div class="corner"><i></i><i></i><i></i></div></div>
+          <div class="body">
+            <span class="cat"><i></i>Оюутны үнэмлэх · Олдсон</span>
+            <h3>Номын сан, 2 давхар, цонхны хажууд</h3>
+            <div class="meta"><span>Эзэнд нь мэдэгдсэн · 40 мин</span><span class="pill green">Олдлоо ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <section class="close wrap g5" id="join">
+    <div class="box">
+      <h2>Хаврын семестрт<br>уулзъя<em>.</em></h2>
+      <p class="sub">Kuul 2027 оны 2 сард МУИС, ШУТИС-МТС-д эхэлнэ. Хуваариа үзэхэд бүртгэл ч хэрэггүй. Найз нэмэх, чатлахад л оюутан гэдгээ баталгаажуулна.</p>
+      <form id="waitlist" novalidate>
+        <label for="email">Нээгдэхэд имэйлээр мэдэгдье</label>
+        <div class="field">
+          <input type="email" id="email" name="email" placeholder="чи@stud.num.edu.mn" autocomplete="email" inputmode="email" required aria-describedby="err">
+          <p class="err" id="err" role="alert">Имэйлээ бүтнээр нь бичээрэй, жишээ нь anar@stud.num.edu.mn</p>
+        </div>
+        <button class="btn" type="submit">Мэдэгд</button>
+      </form>
+      <p class="thanks"><span>Боллоо.</span> Нээгдэх өдөр нь нэг л имэйл очно.</p>
+      <p class="note">Зөвхөн нээгдэх өдөр нь нэг имэйл. Дараа нь юу ч ирэхгүй.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Kuul · Улаанбаатар · 2026</span>
+    <nav aria-label="Хөл хэсгийн холбоос">
+      <a href="#">Нууцлал</a><a href="#">Дүрэм</a><a href="#">Холбоо барих</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Phone: keep the whole mockup one piece on narrow screens.
+  var stage=document.getElementById('stage'), phone=stage.querySelector('.phone');
+  function fit(){var s=Math.min(1,stage.clientWidth/390);stage.style.setProperty('--ps',s);stage.style.setProperty('--ph',phone.offsetHeight+'px');}
+  fit(); addEventListener('resize',fit,{passive:true});
+
+  // Hero: the push lands, then the class strikes through. Plays once.
+  setTimeout(function(){stage.dataset.played='';}, reduce?0:1100);
+
+  // The now line tracks you through the day, the way it tracks the hour in the app.
+  var nowline=document.getElementById('nowline'), nowdot=document.getElementById('nowdot'), day=document.getElementById('day'),
+      moments=[].slice.call(document.querySelectorAll('.moment')),
+      alert1=document.getElementById('alert1'), nav=document.getElementById('nav'), ticking=false;
+
+  function frame(){
+    ticking=false;
+    var y=innerHeight*0.46, d=day.getBoundingClientRect(), active=null;
+    var on = d.top<=y && d.bottom>=y;
+    nowline.toggleAttribute('data-on', on); nowdot.toggleAttribute('data-on', on);
+    nav.toggleAttribute('data-stuck', scrollY>8);
+    for(var i=0;i<moments.length;i++){
+      var r=moments[i].getBoundingClientRect();
+      if(r.top<=y && r.bottom>=y) active=moments[i];
+    }
+    for(var j=0;j<moments.length;j++) moments[j].classList.toggle('on', moments[j]===active);
+    if(active===moments[0]) alert1.setAttribute('data-confirmed','');
+  }
+  function onScroll(){ if(!ticking){ticking=true;requestAnimationFrame(frame);} }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',onScroll,{passive:true});
+  frame();
+
+  // Each moment arrives once.
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.setAttribute('data-in',''); io.unobserve(e.target); } });
+  },{rootMargin:'-70px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  // Marquee: a real stop control, not hover-only (WCAG 2.2.2).
+  var uTrack=document.getElementById('unisTrack'), uBtn=document.querySelector('.unis-toggle');
+  uBtn.addEventListener('click',function(){
+    var paused=uTrack.toggleAttribute('data-paused');
+    uBtn.setAttribute('aria-pressed',String(paused));
+    uBtn.querySelector('.sr').textContent = paused ? 'Сургуулиудын хөдөлгөөнийг үргэлжлүүлэх' : 'Сургуулиудын хөдөлгөөнийг зогсоох';
+  });
+
+  // Waitlist.
+  var form=document.getElementById('waitlist'), email=form.email, err=document.getElementById('err');
+  email.addEventListener('blur',function(){ if(email.value&&!email.checkValidity()){email.setAttribute('aria-invalid','true');err.classList.add('show');} });
+  email.addEventListener('input',function(){ if(email.checkValidity()){email.removeAttribute('aria-invalid');err.classList.remove('show');} });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!email.value||!email.checkValidity()){email.setAttribute('aria-invalid','true');err.classList.add('show');email.focus();return;}
+    // TODO: POST to the waitlist endpoint before marking done.
+    form.classList.add('done');
+  });
+})();
+</script>
+</body>
+</html>
