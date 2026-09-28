@@ -1,0 +1,107 @@
+/* Terms and Privacy pages. Layout and values follow Claude Design ui_kits/kuul-web/Legal.dc.html;
+   shared bits (fonts, .caps, .nav-logo) come from landing.css. */
+
+html { scroll-behavior: smooth; }
+body.legal { color: var(--kuul-ink); }
+body.legal a { color: var(--text-brand); }
+body.legal a:hover { color: var(--kuul-ink); }
+
+.legal-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: var(--border-width-hairline) solid var(--border-default);
+}
+.legal-header-inner {
+  max-width: calc(var(--space-16) * 16); margin: 0 auto;
+  padding: var(--space-3) var(--page-gutter);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+}
+body.legal .legal-back { color: var(--kuul-ink); text-decoration: none; }
+
+.legal-layout {
+  max-width: calc(var(--space-16) * 16); margin: 0 auto;
+  padding: var(--space-12) var(--page-gutter) var(--space-16);
+  display: flex; flex-wrap: wrap; gap: var(--space-12); align-items: flex-start;
+}
+.legal-nav {
+  flex: 0 1 calc(var(--space-16) * 3.6);
+  position: sticky; top: calc(var(--space-16) * 1.4);
+  display: grid; gap: var(--space-1);
+}
+.legal-nav > span { color: var(--text-tertiary); padding: 0 var(--space-3) var(--space-3); }
+body.legal .legal-nav a {
+  display: block; padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font: var(--type-body-strong); color: var(--kuul-ink); text-decoration: none;
+}
+body.legal .legal-nav a { position: relative; isolation: isolate; }
+body.legal .legal-nav a:hover { background: var(--bg-surface-2); color: var(--kuul-ink); }
+.legal-nav__pill { position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--bg-surface-2); }
+
+.legal-main {
+  flex: 1 1 calc(var(--space-16) * 9); min-width: 0;
+  max-width: calc(var(--space-16) * 11);
+  display: grid; gap: var(--space-16);
+}
+.legal-draft {
+  display: flex; gap: var(--space-2); align-items: center;
+  padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+  background: var(--warning-soft); color: var(--warning-text); font: var(--type-label);
+}
+.legal-draft .material-symbols-rounded { font-size: 20px; }
+
+.legal-doc { display: grid; gap: var(--space-5); }
+.legal-meta { color: var(--text-tertiary); }
+.legal-doc h1 {
+  margin: 0;
+  font: var(--weight-extrabold) var(--text-5xl)/var(--lh-5xl) var(--font-sans);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+/* The doc's ## sections use the design's h3 style. */
+.legal-doc h2 { margin: var(--space-2) 0 0; font: var(--type-h3); scroll-margin-top: calc(var(--space-16) * 1.4); }
+.legal-doc p { margin: 0; font: var(--type-body); color: var(--text-secondary); text-wrap: pretty; }
+.legal-doc p.lead { color: var(--text-tertiary); }
+.legal-doc ul, .legal-doc ol {
+  margin: 0; padding-left: var(--space-5);
+  display: grid; gap: var(--space-3);
+  font: var(--type-body); color: var(--text-secondary);
+}
+.legal-doc strong { color: var(--kuul-ink); font-weight: var(--weight-semibold); }
+
+/* The Privacy Policy's tables (not in the design): hairline rules, scroll sideways on phones. */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.legal-doc table { width: 100%; min-width: calc(var(--space-16) * 9); border-collapse: collapse; font: var(--type-caption); color: var(--text-secondary); }
+.legal-doc th, .legal-doc td { text-align: left; vertical-align: top; padding: var(--space-3) var(--space-3) var(--space-3) 0; border-bottom: var(--border-width-hairline) solid var(--border-default); }
+.legal-doc th { font: var(--type-label); color: var(--kuul-ink); border-bottom-color: var(--border-strong); }
+.legal-doc td:first-child { color: var(--kuul-ink); font-weight: var(--weight-medium); }
+
+/* When the nav wraps above the text (narrow screens) it scrolls away instead of covering the text. */
+@media (max-width: 900px) {
+  .legal-nav { position: static; }
+}
+
+/* Switching between Terms and Privacy (separate pages): a cross-document view transition.
+   The header and nav hold still, the grey highlight glides to the new item, and the page
+   fades up and out while the new one rises in. Browsers without support just switch pages. */
+@view-transition { navigation: auto; }
+.legal-header { view-transition-name: legal-header; }
+.legal-nav { view-transition-name: legal-nav; }
+.legal-nav__pill { view-transition-name: legal-pill; }
+
+::view-transition-group(legal-nav) { z-index: 3; }
+::view-transition-group(legal-pill) { z-index: 2; animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.6, 0.08, 0.02, 0.99); }
+::view-transition-group(legal-header) { z-index: 4; }
+::view-transition-old(legal-nav), ::view-transition-new(legal-nav),
+::view-transition-old(legal-header), ::view-transition-new(legal-header) { animation: none; }
+/* The document itself isn't named: it rides the page snapshot (root), which is exactly the screen
+   you were looking at, so a scrolled-down page fades out where it was instead of jumping to its top. */
+::view-transition-old(root) { animation: legal-out 0.3s cubic-bezier(0.4, 0, 1, 1) both; }
+::view-transition-new(root) { animation: legal-in 0.65s cubic-bezier(0.6, 0.08, 0.02, 0.99) 0.12s both; }
+@keyframes legal-out { to { opacity: 0; transform: translateY(-12px); } }
+@keyframes legal-in { from { opacity: 0; transform: translateY(28px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

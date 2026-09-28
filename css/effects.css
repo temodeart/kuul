@@ -1,0 +1,25 @@
+:root {
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-sm: 0 2px 6px rgba(16, 24, 40, 0.08);
+  --shadow-md: 0 8px 24px -8px rgba(16, 24, 40, 0.16);
+  --shadow-lg: 0 20px 48px -16px rgba(16, 24, 40, 0.24);
+  --shadow-brand: 0 8px 20px -6px rgba(91, 75, 255, 0.45);
+  --focus-ring: 0 0 0 3px var(--accent-soft);
+  --shadow-sticker: 0 10px 14px rgba(16, 24, 40, 0.28);   /* use as filter: drop-shadow(var(--shadow-sticker)) on cut-out PNGs */
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  --press-scale: 0.97;
+  --blur-glass: 16px;
+}
+[data-theme="dark"] {
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 20px 48px -16px rgba(0, 0, 0, 0.7);
+  --shadow-sticker: 0 10px 16px rgba(0, 0, 0, 0.55);
+}

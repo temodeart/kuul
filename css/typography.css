@@ -1,0 +1,37 @@
+:root {
+  --font-sans: "Onest", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Sizes — mobile-first scale */
+  --text-xs: 11px;   --lh-xs: 16px;
+  --text-sm: 13px;   --lh-sm: 18px;
+  --text-md: 15px;   --lh-md: 22px;   /* body */
+  --text-lg: 17px;   --lh-lg: 24px;
+  --text-xl: 20px;   --lh-xl: 28px;
+  --text-2xl: 24px;  --lh-2xl: 30px;
+  --text-3xl: 30px;  --lh-3xl: 36px;
+  --text-4xl: 38px;  --lh-4xl: 44px;
+  --text-5xl: 48px;  --lh-5xl: 52px;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-caps: 0.08em;
+
+  /* Semantic type */
+  --type-display: var(--weight-extrabold) var(--text-4xl) / var(--lh-4xl) var(--font-sans);
+  --type-h1: var(--weight-bold) var(--text-3xl) / var(--lh-3xl) var(--font-sans);
+  --type-h2: var(--weight-bold) var(--text-2xl) / var(--lh-2xl) var(--font-sans);
+  --type-h3: var(--weight-semibold) var(--text-xl) / var(--lh-xl) var(--font-sans);
+  --type-title: var(--weight-semibold) var(--text-lg) / var(--lh-lg) var(--font-sans);
+  --type-body: var(--weight-regular) var(--text-md) / var(--lh-md) var(--font-sans);
+  --type-body-strong: var(--weight-semibold) var(--text-md) / var(--lh-md) var(--font-sans);
+  --type-caption: var(--weight-regular) var(--text-sm) / var(--lh-sm) var(--font-sans);
+  --type-label: var(--weight-medium) var(--text-sm) / var(--lh-sm) var(--font-sans);
+  --type-overline: var(--weight-semibold) var(--text-xs) / var(--lh-xs) var(--font-sans);
+}

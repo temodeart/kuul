@@ -1,0 +1,143 @@
+:root {
+  /* Brand — from Kuul logo book v1.0 */
+  --kuul-violet: #5B4BFF;
+  --kuul-ink: #101828;
+  --kuul-lime: #D4F542;
+  --kuul-white: #FFFFFF;
+
+  /* Violet ramp */
+  --violet-50: #F1F0FF;
+  --violet-100: #E3E0FF;
+  --violet-200: #C8C3FF;
+  --violet-300: #A79EFF;
+  --violet-400: #7F72FF;
+  --violet-500: #5B4BFF;
+  --violet-600: #4A3BE0;
+  --violet-700: #3B2EB8;
+  --violet-800: #2C228A;
+  --violet-900: #1E1760;
+
+  /* Lime ramp */
+  --lime-100: #F4FCC9;
+  --lime-300: #E4F98A;
+  --lime-500: #D4F542;
+  --lime-600: #B5D62A;
+  --lime-700: #8FAB1C;
+
+  /* Neutral (ink-tinted greys) */
+  --grey-25: #FCFCFD;
+  --grey-50: #F9FAFB;
+  --grey-100: #F2F4F7;
+  --grey-200: #E4E7EC;
+  --grey-300: #D0D5DD;
+  --grey-400: #98A2B3;
+  --grey-500: #667085;
+  --grey-600: #475467;
+  --grey-700: #344054;
+  --grey-800: #1D2939;
+  --grey-900: #101828;
+  --grey-950: #0B111C;
+
+  /* Course colours — timetable only; assigned per course, cycle in order.
+     Blocks are white with a 3px left stripe + title in the stripe colour; stripes are saturated & dark enough for 4.5:1 text on white. */
+  /* Each course = a vivid 4px left bar (--stripe) on a tinted fill (--course-N) with matching text (--ink) */
+  --course-1-stripe: #1E9E57; --course-1-ink: #14683A;  /* green */
+  --course-2-stripe: #E33B3B; --course-2-ink: #B01F1F;  /* red */
+  --course-3-stripe: #F5820B; --course-3-ink: #96500A;  /* orange */
+  --course-4-stripe: #8B4DF0; --course-4-ink: #6229BE;  /* purple */
+  --course-5-stripe: #12B3A3; --course-5-ink: #0B6E65;  /* teal */
+  --course-6-stripe: #2F6FEB; --course-6-ink: #1A4DB0;  /* blue */
+  --course-7-stripe: #D9A300; --course-7-ink: #6E5200;  /* gold */
+  --course-8-stripe: #A0643A; --course-8-ink: #6B3F1F;  /* brown */
+  /* soft fills, for chips/avatars that reference a course */
+  --course-1: #E3F4EA; --course-1-text: #14683A;
+  --course-2: #FCE7E7; --course-2-text: #B01F1F;
+  --course-3: #FDEEDC; --course-3-text: #96500A;
+  --course-4: #EFE6FE; --course-4-text: #6229BE;
+  --course-5: #DCF5F2; --course-5-text: #0B6E65;
+  --course-6: #E1EBFD; --course-6-text: #1A4DB0;  /* 6.4:1 */
+  --course-7: #FBF1CF; --course-7-text: #6E5200;  /* 6.5:1 */
+  --course-8: #F3E8DF; --course-8-text: #6B3F1F;  /* 7.4:1 */
+  --course-cancelled: var(--grey-200); --course-cancelled-text: var(--grey-600);
+
+  /* Semantic */
+  --red-500: #F04438;   --red-100: #FEE4E2;  --red-700: #B42318;
+  --amber-500: #F79009; --amber-100: #FEF0C7; --amber-700: #B54708;
+  --green-500: #17B26A; --green-100: #DCFAE6; --green-700: #067647;
+  --blue-500: #2E90FA;  --blue-100: #D1E9FF;
+
+  /* Light theme aliases */
+  --bg-page: var(--grey-50);
+  --bg-surface: var(--kuul-white);
+  --bg-surface-2: var(--grey-100);
+  --bg-inverse: var(--kuul-ink);
+  --bg-brand: var(--kuul-violet);
+  --bg-brand-soft: var(--violet-50);
+  --bg-accent: var(--kuul-lime);
+  --bg-hero: var(--kuul-violet);          /* splash, language, intro carousel */
+  --text-primary: var(--kuul-ink);
+  --text-secondary: var(--grey-600);
+  --text-tertiary: var(--grey-500);      /* 4.7:1 on white — grey-400 fails */
+  --text-on-brand: var(--kuul-white);
+  --text-on-accent: var(--kuul-ink);
+  --text-brand: var(--kuul-violet);
+  --text-inverse: var(--kuul-white);
+  --border-default: var(--grey-200);
+  --border-strong: var(--grey-300);
+  --border-focus: var(--kuul-violet);
+  --accent: var(--kuul-violet);          /* interactive accent: violet on light */
+  --btn-primary-fg: var(--kuul-white);    /* text on --accent */
+  --accent-hover: var(--violet-600);
+  --accent-pressed: var(--violet-700);
+  --accent-soft: var(--violet-100);
+  --highlight: var(--kuul-lime);          /* free-slot / "now" marker */
+  --error: var(--red-500);   --error-soft: var(--red-100);   --error-text: var(--red-700);
+  --warning: var(--amber-500); --warning-soft: var(--amber-100); --warning-text: var(--amber-700);
+  --success: var(--green-500); --success-soft: var(--green-100); --success-text: var(--green-700);
+  --info: var(--blue-500); --info-soft: var(--blue-100);
+  --overlay: rgba(16, 24, 40, 0.56);
+  --nav-bg: var(--bg-surface);            /* tab-bar ground; must contrast the Ink active capsule */
+  --now-marker: var(--kuul-ink);          /* current-time line + pill */
+  --now-marker-text: var(--kuul-white);
+}
+
+/* Dark theme — pairing rule from the logo book: Lime lenses + White letters on Ink */
+[data-theme="dark"] {
+  --bg-page: var(--grey-950);
+  --bg-surface: var(--grey-900);
+  --bg-surface-2: var(--grey-800);
+  --bg-inverse: var(--kuul-white);
+  --bg-brand: var(--kuul-violet);
+  --bg-brand-soft: var(--violet-900);
+  --bg-accent: var(--kuul-lime);
+  --bg-hero: var(--kuul-ink);             /* logo book: lime + white on ink */
+  --text-primary: var(--kuul-white);
+  --text-secondary: var(--grey-300);
+  --text-tertiary: var(--grey-400);      /* ≈7:1 on grey-950; grey-500 fails */
+  --text-on-brand: var(--kuul-white);
+  --text-on-accent: var(--kuul-ink);
+  --text-brand: var(--violet-300);
+  --text-inverse: var(--kuul-ink);
+  --border-default: var(--grey-700);
+  --border-strong: var(--grey-600);
+  --border-focus: var(--kuul-lime);
+  --accent: var(--kuul-lime);            /* interactive accent flips to lime in dark mode */
+  --btn-primary-fg: var(--kuul-ink);
+  --accent-hover: var(--lime-300);
+  --accent-pressed: var(--lime-600);
+  --accent-soft: rgba(212, 245, 66, 0.14);
+  --highlight: var(--kuul-lime);
+  --error-soft: rgba(240, 68, 56, 0.16);  --error-text: #FDA29B;
+  --warning-soft: rgba(247, 144, 9, 0.16); --warning-text: #FEC84B;
+  --success-soft: rgba(23, 178, 106, 0.16); --success-text: #75E0A7;
+  --info-soft: rgba(46, 144, 250, 0.16);
+  --overlay: rgba(0, 0, 0, 0.64);
+  --nav-bg: var(--grey-800);
+  --now-marker: var(--kuul-white);
+  --now-marker-text: var(--kuul-ink);
+  --course-cancelled: var(--grey-700); --course-cancelled-text: var(--grey-300);
+  --course-1-stripe: #35C776; --course-1-ink: #8CE8B4; --course-2-stripe: #FF6B6B; --course-2-ink: #FFB3B3; --course-3-stripe: #FFA23D; --course-3-ink: #FFD1A1; --course-4-stripe: #A97CFF; --course-4-ink: #D3BCFF; --course-5-stripe: #2FD4C2; --course-5-ink: #93EAE0;
+  --course-6-stripe: #5B93FF; --course-6-ink: #A9C8FF; --course-7-stripe: #F2C230; --course-7-ink: #F7DC8A; --course-8-stripe: #C98B5E; --course-8-ink: #E8C3A6;
+  --course-1: #10301F; --course-1-text: #8CE8B4; --course-2: #3A1414; --course-2-text: #FFB3B3; --course-3: #3A2409; --course-3-text: #FFD1A1; --course-4: #261440; --course-4-text: #D3BCFF; --course-5: #0C2F2C; --course-5-text: #93EAE0;
+  --course-6: #11244A; --course-6-text: #A9C8FF; --course-7: #352A06; --course-7-text: #F7DC8A; --course-8: #33221A; --course-8-text: #E8C3A6;  /* 9.0 / 10.5 / 9.2:1 */
+}

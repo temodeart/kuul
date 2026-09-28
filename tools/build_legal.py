@@ -1,0 +1,139 @@
+"""Build web/terms/index.html and web/privacy/index.html from the Markdown in web/legal/.
+
+The Markdown is exported from the Claude doc "Kuul — Terms of Use & Privacy Policy (draft)"
+(tabs "Үйлчилгээний нөхцөл (MN)" and "Нууцлалын бодлого (MN)"). When the doc changes,
+export those tabs as Markdown over web/legal/*.mn.md and run:
+
+    python3 tools/build_legal.py   # from the site folder
+
+Only the Markdown the doc uses is handled: # and ## headings, paragraphs, - and 1. lists,
+pipe tables, **bold** and escaped brackets.
+"""
+import html
+import re
+from pathlib import Path
+
+WEB = Path(__file__).resolve().parent.parent
+
+PAGES = [
+    # (slug, source, nav label)
+    ("terms", "legal/terms.mn.md", "Үйлчилгээний нөхцөл"),
+    ("privacy", "legal/privacy.mn.md", "Нууцлалын бодлого"),
+]
+# "Нийгэмлэгийн дүрэм" in the landing footer and the design's Legal nav is section 6 of the Terms.
+COMMUNITY = ("terms", "s6", "Нийгэмлэгийн дүрэм")
+
+
+def inline(text):
+    text = text.replace("\\[", "[").replace("\\]", "]")
+    text = html.escape(text, quote=False)
+    text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    return re.sub(r"\bhello@kuul\.mn\b", '<a href="mailto:hello@kuul.mn">hello@kuul.mn</a>', text)
+
+
+def convert(md):
+    """Markdown → (title, meta line, body HTML)."""
+    lines = md.strip("\n").split("\n")
+    assert lines[0].startswith("# "), "the doc starts with its title"
+    title = lines[0][2:].strip()
+    out, meta, i = [], None, 1
+    while i < len(lines):
+        line = lines[i]
+        if not line.strip():
+            i += 1
+        elif line.startswith("## "):
+            head = line[3:].strip()
+            num = re.match(r"(\d+)\.", head)
+            anchor = f' id="s{num.group(1)}"' if num else ""
+            out.append(f"<h2{anchor}>{inline(head)}</h2>")
+            i += 1
+        elif line.startswith("|"):
+            rows = []
+            while i < len(lines) and lines[i].startswith("|"):
+                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                if not all(re.fullmatch(r":?-+:?", c) for c in cells):
+                    rows.append(cells)
+                i += 1
+            head, *body = rows
+            th = "".join(f"<th>{inline(c)}</th>" for c in head)
+            trs = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in body)
+            out.append(f'<div class="table-wrap"><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div>')
+        elif re.match(r"(- |\d+\. )", line):
+            tag = "ul" if line.startswith("- ") else "ol"
+            items = []
+            while i < len(lines) and re.match(r"(- |\d+\. )", lines[i]):
+                items.append(re.sub(r"^(- |\d+\. )", "", lines[i]))
+                i += 1
+            out.append(f"<{tag}>" + "".join(f"<li>{inline(t)}</li>" for t in items) + f"</{tag}>")
+        else:
+            para = []
+            while i < len(lines) and lines[i].strip() and not re.match(r"(#|\||- |\d+\. )", lines[i]):
+                para.append(lines[i].strip())
+                i += 1
+            text = " ".join(para)
+            if meta is None and not out:
+                meta = text  # "Төсөл 1.0 · Хүчин төгөлдөр болох огноо [ ] · ..." right under the title
+            else:
+                out.append(f"<p>{inline(text)}</p>")
+    return title, meta, "\n".join(out)
+
+
+def page(slug, title, meta, body):
+    # The current page's highlight is its own element so the page-switch transition can glide it
+    # from one nav item to the other (legal.css, view-transition-name: legal-pill).
+    current = ' aria-current="page"'
+    pill = '<span class="legal-nav__pill" aria-hidden="true"></span>'
+    nav = "\n".join(f'<a href="../{s}/"{current if s == slug else ""}>{pill if s == slug else ""}{label}</a>' for s, _, label in PAGES)
+    nav += f'\n<a href="../{COMMUNITY[0]}/#{COMMUNITY[1]}">{COMMUNITY[2]}</a>'
+    # The first two parts of the meta line (version, effective date) sit above the title as an overline.
+    parts = (meta or "").split(" · ")
+    overline, note = " · ".join(parts[:2]), " · ".join(parts[2:])
+    note_html = f'\n<p class="lead">{inline(note)}</p>' if note else ""
+    return f"""<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{html.escape(title)}</title>
+<link rel="icon" href="../assets/logo/app-icon-brand.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0&icon_names=info&display=block">
+<link rel="stylesheet" href="../css/colors.css">
+<link rel="stylesheet" href="../css/typography.css">
+<link rel="stylesheet" href="../css/spacing.css">
+<link rel="stylesheet" href="../css/effects.css">
+<link rel="stylesheet" href="../css/landing.css">
+<link rel="stylesheet" href="../css/legal.css">
+</head>
+<body class="legal">
+<!-- Generated by tools/build_legal.py from {dict((s, src) for s, src, _ in PAGES)[slug]}. Don't edit by hand. -->
+<header class="legal-header">
+  <div class="legal-header-inner">
+    <a href="../" aria-label="Kuul — нүүр" class="nav-logo"><img src="../assets/logo/app-icon-brand.svg" alt="Kuul"></a>
+    <a href="../" class="caps legal-back">← Нүүр хуудас</a>
+  </div>
+</header>
+<div class="legal-layout">
+  <nav class="legal-nav" aria-label="Баримт бичгүүд">
+    <span class="caps">Legal</span>
+    {nav}
+  </nav>
+  <main class="legal-main">
+    <div class="legal-draft"><span class="material-symbols-rounded" aria-hidden="true">info</span>Төсөл. Нийтлэхээс өмнө хуулийн зөвлөхөөр хянуулна.</div>
+    <article class="legal-doc">
+      <span class="caps legal-meta">{inline(overline)}</span>
+      <h1>{html.escape(title)}</h1>{note_html}
+{body}
+    </article>
+  </main>
+</div>
+</body>
+</html>
+"""
+
+
+for slug, src, _ in PAGES:
+    title, meta, body = convert((WEB / src).read_text(encoding="utf-8"))
+    dest = WEB / slug / "index.html"
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text(page(slug, title, meta, body), encoding="utf-8")
+    print(f"{dest.relative_to(WEB)}: {title}")
