@@ -20,8 +20,9 @@ python3 -m http.server 8080   # from the site folder, then open http://localhost
 - `assets/phones/` are renders of the design's `AppPreview` (Хуваарь, Групп,
   Кампус, Би, light) at 2x, with a 40px transparent margin for the shadow.
   Re-render them when those app screens change in the design.
-- `terms/` and `privacy/` (kuul.mn/terms, kuul.mn/privacy) are generated: don't edit
-  their `index.html`. The text comes from the Claude doc "Kuul — Terms of Use & Privacy
-  Policy (draft)", Mongolian tabs, exported as Markdown into `legal/*.mn.md`. The layout
+- `terms/` and `privacy/` (kuul.mn/terms, kuul.mn/privacy, English under `en/`) are
+  generated: don't edit their `index.html`. The text comes from the Claude doc "Kuul — Terms
+  of Use & Privacy Policy (draft)", MN and EN tabs, exported as Markdown into `legal/*.mn.md`
+  and `legal/*.en.md`. The layout
   is the design's `ui_kits/kuul-web/Legal.dc.html`. After updating the Markdown:
   `python3 tools/build_legal.py` (from the site folder).
