@@ -32,8 +32,7 @@ Timetables also include lecturers' names, taken from schools' public timetables.
 - **Data stored abroad** (required while our server is outside Mongolia): see section 7.
 - **A parent's or guardian's agreement** (required if you are 16 or 17): see section 11.
 - **Push notifications** (optional).
-
-We don't collect usage statistics or analytics. If we ever want to, we'll update this policy and ask you first.
+- **No usage statistics.** We don't collect usage statistics or analytics. If we ever want to, we'll update this policy and ask you first.
 
 3.2. You can turn push notifications off at any time in Settings or in your phone's settings. The other consents are what Kuul needs to work, so you withdraw them by deleting your account (Settings → Delete account). Withdrawing stops future use and doesn't undo use before that.
 
