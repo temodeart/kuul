@@ -21,7 +21,7 @@ Version 1.0 · In effect from 29 September 2026 · The Mongolian version is the 
 
 3.2. Signing in with your school email address verifies that you're a student. It's the only way to verify for now.
 
-3.3. Verification lasts until the next 30 September. After that, you verify again for the new school year.
+3.3. Verification lasts for the school year you verify in, until the 30 September after it ends. Then you verify again for the new school year.
 
 3.4. Don't sign up as someone else, use another person's email or ID, or try to get around verification. If you do, we close the account.
 
