@@ -32,9 +32,10 @@ Timetables also include lecturers' names, taken from schools' public timetables.
 - **Data stored abroad** (required while our server is outside Mongolia): see section 7.
 - **A parent's or guardian's agreement** (required if you are 16 or 17): see section 11.
 - **Push notifications** (optional).
-- **Anonymous usage statistics** (optional). We don't collect any today. If we start, we'll collect only counts of actions, never message content.
 
-3.2. You can withdraw any consent in Settings. It stops future use and doesn't undo use before that. Withdrawing core consent means deleting your account, because Kuul can't work without it.
+We don't collect usage statistics or analytics. If we ever want to, we'll update this policy and ask you first.
+
+3.2. You can turn push notifications off at any time in Settings or in your phone's settings. The other consents are what Kuul needs to work, so you withdraw them by deleting your account (Settings → Delete account). Withdrawing stops future use and doesn't undo use before that.
 
 ## 4. What we don't do
 - We don't sell your personal data.
@@ -67,6 +68,7 @@ Kuul asks for each permission the first time a feature needs it. Saying no only 
 | Permission | Used for |
 | --- | --- |
 | Photos | Choosing a photo for a chat, a group or a lost and found post |
+| Camera | Taking a photo to send in a chat. The camera opens only when you tap its button |
 | Location (while using the app) | Shake-to-befriend only, to tell which nearby phone shook at the same moment. iPhone may offer "Always", but Kuul never uses location in the background |
 | Motion sensor | Detecting the shake. The readings never leave your phone |
 | Notifications | Telling you about friend requests, messages, confirmed alerts and lost and found matches. You can turn each type off in Settings |
@@ -78,9 +80,10 @@ Kuul asks for each permission the first time a feature needs it. Saying no only 
 | --- | --- | --- | --- |
 | Oracle Cloud | Japan (Tokyo) | Everything in this policy | Hosting our server, database and photos |
 | Resend | USA | Your email address and the sign-in code | Sending sign-in emails |
+| Apple Push Notification service | USA | The notification's title and text, and a token for your phone | Delivering push notifications to iPhone |
 | Apple App Store, Google Play | USA | What the stores collect when you download the app, under their own policies | Distributing the app |
 
-7.2. We don't use advertising, analytics or crash reporting services. Push notifications through Apple and Google are not switched on yet. Before we add any new provider, we update this list and ask for your consent again.
+7.2. We don't use advertising, analytics or crash reporting services. Push notifications on Android (Google) and text messages (SMS) are not used yet. Before we add any new provider, we update this list and ask for your consent again.
 
 7.3. Our agreements with providers limit them to the purpose above and forbid them from using your data for themselves. We remain responsible to you for what they do with it.
 
