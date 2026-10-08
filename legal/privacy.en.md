@@ -20,6 +20,7 @@ Temuujin Batbold, an individual in Ulaanbaatar, runs Kuul and decides how your d
 | Location | Your location at the moment you shake your phone | Finding the other phone in shake-to-befriend | About 18 seconds in server memory. Never saved, never shown to anyone |
 | Device and technical | A random device ID, platform, app version, IP address, sign-in times | Security, stopping abuse, fixing bugs | Sign-in codes and their IP: 1 day. Server logs: 90 days |
 | Consents | Which consents you gave or withdrew, when, and which version of these terms you accepted | Proving what you agreed to | While your account exists |
+| Waitlist | The email address you leave on kuul.mn, and when you left it. No account needed | One email to confirm, and one when Kuul opens. Nothing else | Until you leave the list (deleted at once), and no longer than 30 days after the launch email |
 
 We don't collect your gender, phone number, contacts, school portal password, or location history.
 
@@ -32,6 +33,7 @@ Timetables also include lecturers' names, taken from schools' public timetables.
 - **Data stored abroad** (required while our server is outside Mongolia): see section 7.
 - **A parent's or guardian's agreement** (required if you are 16 or 17): see section 11.
 - **Push notifications** (optional).
+- **Waitlist** (on kuul.mn, no account needed): leaving your email address there is your consent to the two emails in section 2. Every one of them has a link to leave the list.
 - **No usage statistics.** We don't collect usage statistics or analytics. If we ever want to, we'll update this policy and ask you first.
 
 3.2. You can turn push notifications off at any time in Settings or in your phone's settings. The other consents are what Kuul needs to work, so you withdraw them by deleting your account (Settings → Delete account). Withdrawing stops future use and doesn't undo use before that.
@@ -78,7 +80,7 @@ Kuul asks for each permission the first time a feature needs it. Saying no only 
 | Provider | Country | What they get | Why |
 | --- | --- | --- | --- |
 | Oracle Cloud | Japan (Tokyo) | Everything in this policy | Hosting our server, database and photos |
-| Resend | USA | Your email address and the sign-in code | Sending sign-in emails |
+| Resend | USA | Your email address, and the sign-in code or the waitlist email | Sending sign-in and waitlist emails |
 | Apple Push Notification service | USA | The notification's title and text, and a token for your phone | Delivering push notifications to iPhone |
 | Apple App Store, Google Play | USA | What the stores collect when you download the app, under their own policies | Distributing the app |
 
@@ -136,4 +138,4 @@ We'll tell you in the app at least 14 days before a change takes effect. If we w
 ## 13. Contact
 Temuujin Batbold · Apartment 108, Dundnaran 4, 31st khoroo, Songinokhairkhan district, Ulaanbaatar, Mongolia
 
-hello@kuul.mn · In the app: Би → Help
+hello@kuul.mn · In the app: Me → Help & safety

@@ -114,4 +114,4 @@ We'll tell you in the app at least 14 days before a change takes effect, and say
 ## 15. Contact
 Temuujin Batbold · Apartment 108, Dundnaran 4, 31st khoroo, Songinokhairkhan district, Ulaanbaatar, Mongolia
 
-hello@kuul.mn · In the app: Би → Help
+hello@kuul.mn · In the app: Me → Help & safety

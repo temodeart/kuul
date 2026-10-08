@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#4f9be8">
 <link rel="icon" href="assets/logo/app-icon-brand.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/Onest-ExtraBold.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0&icon_names=arrow_forward,arrow_outward,menu&display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0&icon_names=arrow_forward,arrow_outward,check,menu&display=block">
 <link rel="stylesheet" href="css/colors.css">
 <link rel="stylesheet" href="css/typography.css">
 <link rel="stylesheet" href="css/spacing.css">
@@ -144,7 +144,19 @@
   <div class="join-inner">
     <h2 data-split>Хаврын семестрт уулзъя.</h2>
     <p data-fade>Kuul 2027 оны 2 сард МУИС, ШУТИС-МТС-д эхэлнэ. Хуваариа үзэхэд бүртгэл ч хэрэггүй. Найз нэмэх, чатлахад л оюутан гэдгээ баталгаажуулна.</p>
-    <a class="join-cta" href="#join">Нээгдэхэд мэдэгд<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></a>
+    <div class="waitlist" id="waitlist" data-state="closed">
+      <button class="join-cta" type="button" data-waitlist-open aria-controls="waitlist-form" aria-expanded="false">Нээгдэхэд мэдэгд<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></button>
+      <form class="waitlist-form" id="waitlist-form" novalidate>
+        <label class="visually-hidden" for="waitlist-email">Имэйл хаяг</label>
+        <div class="waitlist-field">
+          <input id="waitlist-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" maxlength="254" placeholder="Имэйл хаяг" required aria-describedby="waitlist-note">
+          <button class="waitlist-submit" type="submit"><span class="waitlist-submit__text">Мэдэгд</span><span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></button>
+        </div>
+        <div class="waitlist-hp" aria-hidden="true"><label>Вэбсайт <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="waitlist-note" id="waitlist-note" aria-live="polite">Kuul нээгдэх өдөр нэг имэйл илгээнэ, өөр юу ч илгээхгүй. <a href="privacy/">Нууцлалын бодлого</a></p>
+      </form>
+      <p class="waitlist-done" role="status" tabindex="-1"><span class="material-symbols-rounded" aria-hidden="true">check</span><span>Бүртгэгдлээ. Kuul нээгдэх өдөр <b data-waitlist-email></b> руу мэдэгдэнэ.</span></p>
+    </div>
   </div>
 </section>
 

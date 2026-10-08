@@ -111,4 +111,57 @@
     const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { reveal(en.target, true); io.unobserve(en.target); } }), { threshold: 0.35 });
     rv.forEach(el => io.observe(el));
   }
+
+  // Waitlist: "Нээгдэхэд мэдэгд" opens an email field; every other CTA scrolls here and opens it too.
+  const wl = $("#waitlist"), wlForm = $("#waitlist-form"), wlInput = $("#waitlist-email"), wlNote = $("#waitlist-note");
+  const wlOpenBtn = $("[data-waitlist-open]", wl), wlDone = $(".waitlist-done", wl);
+  const API = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "http://localhost:4000/v1" : "https://api.kuul.mn/v1";
+  const noteText = wlNote.innerHTML;
+  const setState = (state, msg) => {
+    wl.dataset.state = state;
+    wlOpenBtn.setAttribute("aria-expanded", String(state !== "closed"));
+    wlInput.setAttribute("aria-invalid", String(state === "error"));
+    wlNote.innerHTML = msg || noteText;
+  };
+  const openWaitlist = focus => {
+    if (wl.dataset.state === "closed") setState("open");
+    if (focus && wl.dataset.state !== "done") wlInput.focus({ preventScroll: true });
+  };
+  wlOpenBtn.addEventListener("click", () => openWaitlist(true));
+  $$('a[href="#join"]').forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    $("#join").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    openWaitlist(false);
+    // Focus once the scroll settles, or the browser jumps there instead.
+    const done = () => { removeEventListener("scrollend", done); clearTimeout(t); openWaitlist(true); };
+    const t = setTimeout(done, 900);
+    addEventListener("scrollend", done);
+  }));
+  wlInput.addEventListener("input", () => { if (wl.dataset.state === "error") setState("open"); });
+  wlForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (wl.dataset.state === "sending") return;
+    const email = wlInput.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setState("error", "Имэйл хаягаа шалгаад дахин оролдоно уу."); wlInput.focus(); return; }
+    setState("sending");
+    try {
+      const res = await fetch(API + "/waitlist", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, website: wlForm.elements.website.value }),
+      });
+      if (res.ok) {
+        $("[data-waitlist-email]", wl).textContent = email.toLowerCase();
+        setState("done");
+        wlDone.focus({ preventScroll: true });
+        return;
+      }
+      setState("error", res.status === 400 ? "Имэйл хаягаа шалгаад дахин оролдоно уу."
+        : res.status === 429 ? "Хэт олон оролдлого. Хэдэн минутын дараа дахин оролдоно уу."
+        : "Алдаа гарлаа. Дахин оролдоно уу.");
+    } catch {
+      setState("error", "Холбогдож чадсангүй. Интернэтээ шалгаад дахин оролдоно уу.");
+    }
+    wlInput.focus();
+  });
 })();

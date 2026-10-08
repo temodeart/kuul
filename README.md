@@ -26,3 +26,8 @@ python3 -m http.server 8080   # from the site folder, then open http://localhost
   and `legal/*.en.md`. The layout
   is the design's `ui_kits/kuul-web/Legal.dc.html`. After updating the Markdown:
   `python3 tools/build_legal.py` (from the site folder).
+- "Нээгдэхэд мэдэгд" opens an email field (`#waitlist` in `index.html`, bottom of
+  `js/landing.js`) that posts to `https://api.kuul.mn/v1/waitlist`. The API allows kuul.mn
+  across origins for the waitlist routes only. `unsubscribe/` is where the link in waitlist
+  emails lands; it unsubscribes only when the button is pressed, because mail scanners open
+  every link.

@@ -308,9 +308,72 @@ button { font: inherit; }
   border-radius: var(--radius-full);
   background: var(--accent); color: var(--kuul-white);
   font: var(--type-body-strong); text-decoration: none;
+  border: 0; cursor: pointer;
 }
+.join-cta:disabled { opacity: 0.6; cursor: progress; }
 .join-cta:hover { background: var(--accent-hover, var(--accent)); color: var(--kuul-white); }
 .join-cta .material-symbols-rounded { font-size: 20px; }
+
+/* Waitlist: the CTA opens into an email field in the same pill. */
+.waitlist { width: 100%; display: grid; justify-items: center; }
+.waitlist > * { grid-area: 1 / 1; }
+.waitlist-form, .waitlist-done { display: none; }
+.waitlist:not([data-state="closed"]) .join-cta { display: none; }
+.waitlist:not([data-state="closed"]):not([data-state="done"]) .waitlist-form { display: grid; }
+.waitlist[data-state="done"] .waitlist-done { display: flex; }
+.waitlist-form, .waitlist-done { animation: waitlist-in 0.5s var(--ease-hover) both; }
+@keyframes waitlist-in { from { opacity: 0; transform: scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .waitlist-form, .waitlist-done { animation: none; } }
+
+.waitlist-form { width: min(100%, calc(var(--space-16) * 7)); gap: var(--space-3); justify-items: center; }
+.waitlist-field {
+  width: 100%; box-sizing: border-box;
+  display: flex; align-items: center; gap: var(--space-1);
+  height: var(--control-lg); padding: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--bg-page);
+  border: var(--border-width-hairline) solid var(--border-strong);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.waitlist-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.waitlist[data-state="error"] .waitlist-field { border-color: var(--error); box-shadow: 0 0 0 3px var(--error-soft); }
+.waitlist-field input {
+  flex: 1; min-width: 0; height: 100%;
+  padding: 0 var(--space-2) 0 var(--space-4);
+  border: 0; outline: 0; background: transparent;
+  font: var(--type-body); font-size: var(--text-md); color: var(--text-primary);
+}
+.waitlist-field input::placeholder { color: var(--text-tertiary); }
+.waitlist-submit {
+  flex: none; height: 100%;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border: 0; border-radius: var(--radius-full);
+  background: var(--accent); color: var(--kuul-white);
+  font: var(--type-body-strong); cursor: pointer;
+}
+.waitlist-submit:hover { background: var(--accent-hover, var(--accent)); }
+.waitlist-submit:focus-visible, .join-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.waitlist-submit .material-symbols-rounded { font-size: 20px; }
+.waitlist[data-state="sending"] .waitlist-submit { opacity: 0.6; cursor: progress; }
+.join .waitlist-note { font: var(--type-caption); color: var(--text-tertiary); }
+.join .waitlist[data-state="error"] .waitlist-note { color: var(--error-text); }
+.waitlist-note a { color: inherit; }
+.waitlist-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.join .waitlist-done {
+  align-items: center; gap: var(--space-3);
+  min-height: var(--control-lg); padding: var(--space-3) var(--space-6); box-sizing: border-box;
+  border-radius: var(--radius-full);
+  background: var(--success-soft); color: var(--text-primary);
+  font: var(--type-body); text-align: left; outline: 0;
+}
+.waitlist-done b { font-weight: var(--weight-semibold); overflow-wrap: anywhere; }
+.waitlist-done .material-symbols-rounded { flex: none; font-size: 22px; color: var(--success); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 480px) {
+  .waitlist-submit__text { display: none; }
+  .waitlist-submit { padding: 0 var(--space-4); }
+}
 
 /* 04 Footer */
 .site-footer { background: var(--bg-surface-2); color: var(--kuul-ink); overflow: hidden; }
