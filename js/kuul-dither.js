@@ -3,6 +3,7 @@
    before the output canvas in the stage into an offscreen 2D canvas each frame, then runs the
    dither shader on it. Outside the lens the canvas is transparent, so the real DOM shows through.
    Rule: never over UI — text, buttons, links, nav, inputs and [data-no-dither] are masked out, and the lens hides while the cursor is on them.
+   Kuul change: [data-dither-under] (the hero title) is not masked; it is layered above the canvas so the lens runs behind its letters.
    KuulDither.create(stage, canvas, options) → { setOptions, destroy }
    Copied as-is from Claude Design (ui_kits/kuul-web/kuul-dither.js). */
 (function () {
@@ -87,8 +88,8 @@ void main(){
       stage.querySelectorAll("img").forEach(img => { if (img.compareDocumentPosition(output) & Node.DOCUMENT_POSITION_FOLLOWING) drawImg(cctx, img, img.getBoundingClientRect(), base, k); });
       if (ui.width !== w || ui.height !== h) { ui.width = w; ui.height = h; }
       uctx.clearRect(0, 0, w, h); uctx.fillStyle = "#000"; const pad = 10 * k;
-      stage.querySelectorAll(UI_SEL).forEach(el => { const cs = getComputedStyle(el); if (cs.visibility === "hidden" || parseFloat(cs.opacity) < 0.05) return; const r = el.getBoundingClientRect(); if (r.width < 1 || r.height < 1) return; uctx.beginPath(); uctx.roundRect ? uctx.roundRect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2, pad * 2) : uctx.rect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2); uctx.fill(); });
-      stage.querySelectorAll("div, span").forEach(el => { if (el.closest(UI_SEL)) return; for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { const rg = document.createRange(); rg.selectNodeContents(n); for (const r of rg.getClientRects()) uctx.fillRect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2); } });
+      stage.querySelectorAll(UI_SEL).forEach(el => { if (el.closest("[data-dither-under]")) return; const cs = getComputedStyle(el); if (cs.visibility === "hidden" || parseFloat(cs.opacity) < 0.05) return; const r = el.getBoundingClientRect(); if (r.width < 1 || r.height < 1) return; uctx.beginPath(); uctx.roundRect ? uctx.roundRect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2, pad * 2) : uctx.rect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2); uctx.fill(); });
+      stage.querySelectorAll("div, span").forEach(el => { if (el.closest(UI_SEL) || el.closest("[data-dither-under]")) return; for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { const rg = document.createRange(); rg.selectNodeContents(n); for (const r of rg.getClientRects()) uctx.fillRect((r.left - b.left) * k - pad, (r.top - b.top) * k - pad, r.width * k + pad * 2, r.height * k + pad * 2); } });
       gl.bindTexture(gl.TEXTURE_2D, uiTex); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, ui);
       gl.bindTexture(gl.TEXTURE_2D, tex);

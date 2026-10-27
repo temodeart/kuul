@@ -75,6 +75,7 @@ button { font: inherit; }
   top: max(9vh, calc(var(--space-16) + var(--space-5)));
   display: grid; justify-items: center; text-align: center;
   will-change: transform; pointer-events: none;
+  z-index: 2; /* above the dither canvas (z-index 1): the lens runs behind the title, not cut around it */
 }
 .hero-title h1 {
   margin: 0; display: grid;
