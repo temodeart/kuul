@@ -5,7 +5,7 @@ Version 1.0 · In effect from 29 September 2026 · The Mongolian version is the 
 This policy explains what personal data Kuul collects, why, who sees it, how long we keep it, and what you can do about it. It follows Mongolia's Law on Personal Data Protection (2021).
 
 ## 1. Who is responsible
-Temuujin Batbold, an individual in Ulaanbaatar, runs Kuul and decides how your data is used, so is responsible for it. For anything about your data, email hello@kuul.mn.
+The people who run Kuul, from Ulaanbaatar, decide how your data is used and are responsible for it. For anything about your data, email hello@kuul.mn.
 
 ## 2. What we collect
 | What | Details | Why | How long we keep it |
@@ -136,6 +136,4 @@ Email hello@kuul.mn for anything that isn't in the app. We reply within 10 worki
 We'll tell you in the app at least 14 days before a change takes effect. If we want to use your data in a new way or share it with a new provider, we ask for your consent first.
 
 ## 13. Contact
-Temuujin Batbold · Apartment 108, Dundnaran 4, 31st khoroo, Songinokhairkhan district, Ulaanbaatar, Mongolia
-
-hello@kuul.mn · In the app: Me → Help & safety
+hello@kuul.mn

@@ -1,11 +1,11 @@
 # Kuul Terms of Use
 
-Version 1.0 · In effect from 29 September 2026 · The Mongolian version is the official one. If the two differ, the Mongolian text applies.
+Version 1.1 · In effect from 28 October 2026 · The Mongolian version is the official one. If the two differ, the Mongolian text applies.
 
 ## 1. About these terms
-1.1. Kuul is a timetable app for university students in Mongolia. It has your class timetable, class and friend chats, campus alerts, and lost and found. Temuujin Batbold, an individual in Ulaanbaatar ("Kuul", "we"), runs it. If Kuul becomes a company, we'll tell you in the app and update these terms.
+1.1. Kuul is a timetable app for university students in Mongolia. It has your class timetable, class and friend chats, campus alerts, and lost and found. In these terms, "Kuul" and "we" mean the people who run Kuul, from Ulaanbaatar. If Kuul becomes a company, we'll tell you in the app and update these terms.
 
-1.2. These terms are an agreement between you and us. You accept them by ticking the box on the consent screen when you sign up; we record which version you accepted and when. If you don't accept them, don't create an account. You can still browse lost and found without one.
+1.2. These terms are an agreement between you and us, and they are Kuul's end user licence agreement (EULA). You accept them by ticking the box on the terms screen before you sign up or sign in; we record which version you accepted and when. If you don't accept them, don't create an account. You can still browse lost and found without one.
 
 1.3. How we handle your personal data is in the Privacy policy. We ask for each kind of consent separately, and accepting these terms doesn't count as any of them.
 
@@ -54,6 +54,8 @@ Version 1.0 · In effect from 29 September 2026 · The Mongolian version is the 
 1. Use Kuul for anything illegal.
 
 6.2. If you see something that breaks these rules, report it in the app rather than dealing with it yourself.
+
+6.3. Kuul has zero tolerance for objectionable content and abusive users. We remove content that breaks these rules, usually within 24 hours of a report, and we suspend or close the account of anyone who posts it or abuses other people (section 8).
 
 ## 7. Your content
 7.1. What you post on Kuul stays yours: messages, photos, alerts, lost and found posts, timetable notes. You give us a free, non-transferable permission to store it and show it to the people you shared it with. We also use it to run moderation (section 8). That's all the permission covers.
@@ -112,6 +114,4 @@ We'll tell you in the app at least 14 days before a change takes effect, and say
 14.3. You can take a personal data complaint directly to the National Human Rights Commission of Mongolia.
 
 ## 15. Contact
-Temuujin Batbold · Apartment 108, Dundnaran 4, 31st khoroo, Songinokhairkhan district, Ulaanbaatar, Mongolia
-
-hello@kuul.mn · In the app: Me → Help & safety
+hello@kuul.mn
