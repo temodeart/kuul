@@ -53,8 +53,11 @@ button { font: inherit; }
 /* 01 Layered hero */
 .hero { position: relative; height: 320vh; }
 .stage { position: sticky; top: 0; height: 100vh; overflow: hidden; background: var(--kuul-sky, #4f9be8); }
-.layer { position: absolute; inset: -6%; will-change: transform; }
-.layer-full { position: absolute; inset: 0; will-change: transform; pointer-events: none; }
+/* No will-change on the photo layers: with it, Chrome keeps each layer drawn at its biggest zoom
+   (the portal reaches 6.5x) and runs out of graphics memory after a scroll down and back up, so
+   parts of the hero vanish. Without it Chrome redraws them at their current size; same frame rate. */
+.layer { position: absolute; inset: -6%; }
+.layer-full { position: absolute; inset: 0; pointer-events: none; }
 .layer img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .building-side { position: absolute; height: auto; display: block; filter: blur(0.5px) saturate(0.85) brightness(1.04) contrast(0.92); opacity: 0.92; }
 .building-shutis { left: -5vw; top: calc(73vh - 20vw); width: max(calc(var(--space-16) * 5), 52vw); }
@@ -74,7 +77,7 @@ button { font: inherit; }
   position: absolute; left: 0; right: 0;
   top: max(9vh, calc(var(--space-16) + var(--space-5)));
   display: grid; justify-items: center; text-align: center;
-  will-change: transform; pointer-events: none;
+  pointer-events: none;
   z-index: 2; /* above the dither canvas (z-index 1): the lens runs behind the title, not cut around it */
 }
 .hero-title h1 {
@@ -215,15 +218,6 @@ button { font: inherit; }
 
 /* Bottom dock */
 .hero-dock { position: absolute; left: 0; right: 0; bottom: var(--space-6); display: grid; justify-items: center; gap: var(--space-4); padding: 0 var(--space-4); }
-.scroll-hint {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  height: var(--control-sm); padding: 0 var(--space-4);
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(var(--space-2)); -webkit-backdrop-filter: blur(var(--space-2));
-  font: var(--type-overline); letter-spacing: var(--tracking-caps); color: var(--kuul-ink);
-}
-.scroll-hint::before { content: ""; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--accent); }
 .dock {
   display: flex; align-items: center; gap: var(--space-2);
   padding: var(--space-2); border-radius: var(--radius-full);
