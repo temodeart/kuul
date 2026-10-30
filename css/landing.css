@@ -309,17 +309,13 @@ button { font: inherit; }
 .join-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .join-cta:hover { background: var(--accent-hover, var(--accent)); color: var(--kuul-white); }
 .join-cta .material-symbols-rounded { font-size: 20px; }
-/* App Store QR: only where someone is on a computer and wants the app on their phone. */
-.join-qr {
-  margin: var(--space-2) 0 0; display: none; align-items: center; gap: var(--space-4);
-  padding: var(--space-3) var(--space-5) var(--space-3) var(--space-3); text-align: left;
-  background: var(--bg-surface); border: var(--border-width-hairline) solid var(--border-default); border-radius: var(--radius-lg);
+/* Computers get the App Store QR instead of the button; phones and touch screens get the button
+   (you can't scan your own screen). */
+.join-qr { display: none; width: 240px; height: 240px; margin-top: var(--space-2); padding: var(--space-4); box-sizing: border-box; background: var(--kuul-white); border: var(--border-width-hairline) solid var(--border-default); border-radius: var(--radius-lg); }
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .join-qr { display: block; }
+  .join .join-cta { display: none; }
 }
-.join-qr img { width: 112px; height: 112px; padding: var(--space-2); background: var(--kuul-white); border-radius: var(--radius-md); display: block; flex: none; }
-.join-qr figcaption { display: grid; gap: var(--space-1); max-width: calc(var(--space-16) * 3.4); }
-.join-qr b { font: var(--type-body-strong); color: var(--kuul-ink); }
-.join-qr span { font: var(--type-caption); color: var(--text-secondary); }
-@media (hover: hover) and (pointer: fine) and (min-width: 901px) { .join-qr { display: flex; } }
 
 /* Waitlist: the CTA opens into an email field in the same pill. */
 
