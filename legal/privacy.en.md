@@ -80,7 +80,7 @@ Kuul asks for each permission the first time a feature needs it. Saying no only 
 | Provider | Country | What they get | Why |
 | --- | --- | --- | --- |
 | Oracle Cloud | Japan (Tokyo) | Everything in this policy | Hosting our server, database and photos |
-| Resend | USA | Your email address, and the sign-in code or the waitlist email | Sending sign-in and waitlist emails |
+| Zoho (ZeptoMail) | USA | Your email address, and the sign-in code or the waitlist email | Sending sign-in and waitlist emails |
 | Apple Push Notification service | USA | The notification's title and text, and a token for your phone | Delivering push notifications to iPhone |
 | Apple App Store, Google Play | USA | What the stores collect when you download the app, under their own policies | Distributing the app |
 
